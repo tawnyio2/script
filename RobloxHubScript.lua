@@ -1,93 +1,41 @@
 --[[
-    📱 ROBLOX HUB SCRIPT - VERSION MOBILE OPTIMISÉE
+    📱 ROBLOX HUB SCRIPT - VERSION GUI SEULEMENT
     
-    Version spécialement conçue pour les appareils mobiles avec :
-    - Interface tactile optimisée
-    - Boutons plus grands (minimum 60px)
-    - Disposition responsive
-    - Menu hamburger mobile-friendly
-    - Boutons flottants pour accès rapide
-    - Support orientation portrait/paysage
+    Version GUI uniquement pour compatibilité maximale :
+    - Interface tactile mobile-optimisée
+    - Boutons visuels sans fonctionnalités actives
+    - Compatible avec tous les exploits
+    - Aucun service problématique utilisé
+    - Sécurisé et stable
     
     📋 INSTRUCTIONS D'UTILISATION :
-    1. Copiez ce script dans votre exploit mobile
+    1. Copiez ce script dans votre exploit
     2. Exécutez le script dans le jeu
-    3. Utilisez les contrôles tactiles pour naviguer
+    3. L'interface s'affiche sans affecter le gameplay
     
     ⚠️  AVERTISSEMENT : À des fins éducatives uniquement
 --]]
 
 -- ========================================
--- 🔧 SERVICES ET VARIABLES GLOBALES
+-- 🔧 SERVICES ET VARIABLES BASIQUES
 -- ========================================
 
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
-local SoundService = game:GetService("SoundService")
-local GuiService = game:GetService("GuiService")
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Variables pour le personnage
-local character
-local humanoid
-local rootPart
-
--- Détection mobile
+-- Détection mobile sécurisée
 local isMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 local screenSize = workspace.CurrentCamera.ViewportSize
 
--- Fonction pour obtenir le personnage de manière sécurisée
-local function getCharacter()
-    if player.Character and player.Character:FindFirstChild("Humanoid") and player.Character:FindFirstChild("HumanoidRootPart") then
-        return player.Character, player.Character.Humanoid, player.Character.HumanoidRootPart
-    end
-    return nil, nil, nil
-end
-
--- Fonction pour attendre le personnage
-local function waitForCharacter()
-    local attempts = 0
-    local maxAttempts = 100
-    
-    while attempts < maxAttempts do
-        local char, hum, root = getCharacter()
-        if char and hum and root then
-            print("✅ Personnage trouvé après", attempts, "tentatives")
-            return char, hum, root
-        end
-        
-        attempts = attempts + 1
-        wait(0.1)
-    end
-    
-    warn("❌ Impossible de trouver le personnage après", maxAttempts, "tentatives")
-    return nil, nil, nil
-end
-
--- Initialisation du personnage
-print("🔍 Recherche du personnage...")
-character, humanoid, rootPart = waitForCharacter()
-
-if not character then
-    warn("❌ ERREUR: Personnage non trouvé. Le script ne peut pas continuer.")
-    return
-end
-
-print("✅ Personnage initialisé avec succès!")
 print("📱 Mode mobile détecté:", isMobile)
+print("📺 Taille d'écran:", screenSize.X .. "x" .. screenSize.Y)
 
--- Configuration mobile-optimisée
+-- Configuration GUI mobile-optimisée
 local CONFIG = {
-    -- Paramètres de mouvement
-    NORMAL_WALKSPEED = 16,
-    ENHANCED_WALKSPEED = 50,
-    NORMAL_JUMPPOWER = 50,
-    ENHANCED_JUMPPOWER = 120,
-    
     -- Paramètres GUI mobile
     MOBILE_BUTTON_SIZE = isMobile and 70 or 50,
     MOBILE_SPACING = isMobile and 15 or 10,
@@ -110,19 +58,17 @@ local CONFIG = {
     }
 }
 
--- Variables d'état
-local gameState = {
+-- Variables d'état GUI uniquement (pas de fonctionnalités réelles)
+local guiState = {
     speedEnabled = false,
     jumpEnabled = false,
     flyEnabled = false,
     noClipEnabled = false,
-    menuOpen = false,
-    health = 100,
-    energy = 100
+    menuOpen = false
 }
 
 -- ========================================
--- 🛠️ FONCTIONS UTILITAIRES MOBILES
+-- 🛠️ FONCTIONS UTILITAIRES GUI
 -- ========================================
 
 -- Fonction pour créer des animations fluides
@@ -170,7 +116,7 @@ local function createMobileFrame(parent, properties)
     return frame
 end
 
--- Fonction pour créer des boutons tactiles optimisés
+-- Fonction pour créer des boutons tactiles optimisés (GUI seulement)
 local function createMobileButton(parent, text, position, size, callback, buttonType)
     buttonType = buttonType or "primary"
     
@@ -209,7 +155,7 @@ local function createMobileButton(parent, text, position, size, callback, button
     clickDetector.BackgroundTransparency = 1
     clickDetector.Text = ""
     
-    -- Effets tactiles améliorés
+    -- Effets tactiles améliorés (visuels seulement)
     local originalSize = buttonSize
     local pressedSize = UDim2.new(originalSize.X.Scale, originalSize.X.Offset, originalSize.Y.Scale, originalSize.Y.Offset - 4)
     
@@ -234,9 +180,8 @@ local function createMobileButton(parent, text, position, size, callback, button
             callback()
         end
         
-        -- Effet de vibration pour mobile
+        -- Effet de vibration visuel pour mobile
         if isMobile then
-            -- Simulation d'effet tactile
             local vibrationTween = createTween(button, {Rotation = 2}, 0.05)
             if vibrationTween then 
                 vibrationTween:Play()
@@ -252,157 +197,42 @@ local function createMobileButton(parent, text, position, size, callback, button
 end
 
 -- ========================================
--- 🏃 SYSTÈME DE MOUVEMENT AMÉLIORÉ
+-- 🎭 FONCTIONS GUI SIMULÉES (SANS EFFET RÉEL)
 -- ========================================
 
-local MovementSystem = {}
-
-function MovementSystem.toggleSpeed()
-    local char, hum, root = getCharacter()
-    if not hum then
-        warn("❌ Impossible de modifier la vitesse: Humanoid non trouvé")
-        return
-    end
-    
-    gameState.speedEnabled = not gameState.speedEnabled
-    
-    if gameState.speedEnabled then
-        hum.WalkSpeed = CONFIG.ENHANCED_WALKSPEED
-        print("🏃 Vitesse améliorée activée !")
-    else
-        hum.WalkSpeed = CONFIG.NORMAL_WALKSPEED
-        print("🚶 Vitesse normale restaurée")
-    end
+local function toggleSpeedGUI()
+    guiState.speedEnabled = not guiState.speedEnabled
+    print("🎭 [GUI SEULEMENT] Vitesse:", guiState.speedEnabled and "ON" or "OFF")
 end
 
-function MovementSystem.toggleJump()
-    local char, hum, root = getCharacter()
-    if not hum then
-        warn("❌ Impossible de modifier le saut: Humanoid non trouvé")
-        return
-    end
-    
-    gameState.jumpEnabled = not gameState.jumpEnabled
-    
-    if gameState.jumpEnabled then
-        hum.JumpPower = CONFIG.ENHANCED_JUMPPOWER
-        print("🦘 Saut amélioré activé !")
-    else
-        hum.JumpPower = CONFIG.NORMAL_JUMPPOWER
-        print("👟 Saut normal restauré")
-    end
+local function toggleJumpGUI()
+    guiState.jumpEnabled = not guiState.jumpEnabled
+    print("🎭 [GUI SEULEMENT] Saut:", guiState.jumpEnabled and "ON" or "OFF")
 end
 
-local flyConnection
-function MovementSystem.toggleFly()
-    local char, hum, root = getCharacter()
-    if not root then
-        warn("❌ Impossible d'activer le vol: RootPart non trouvé")
-        return
-    end
-    
-    gameState.flyEnabled = not gameState.flyEnabled
-    
-    if gameState.flyEnabled then
-        local bodyVelocity = Instance.new("BodyVelocity")
-        bodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
-        bodyVelocity.Velocity = Vector3.new(0, 0, 0)
-        bodyVelocity.Parent = root
-        
-        flyConnection = RunService.Heartbeat:Connect(function()
-            local char, hum, root = getCharacter()
-            if not root or not bodyVelocity.Parent then return end
-            
-            local camera = workspace.CurrentCamera
-            local moveVector = hum.MoveDirection
-            local lookDirection = camera.CFrame.LookVector
-            
-            local velocity = Vector3.new(0, 0, 0)
-            
-            if moveVector.Magnitude > 0 then
-                velocity = velocity + (camera.CFrame.RightVector * moveVector.X + lookDirection * moveVector.Z).Unit * 50
-            end
-            
-            -- Contrôles tactiles pour monter/descendre
-            if UserInputService:IsKeyDown(Enum.KeyCode.Space) or gameState.flyUp then
-                velocity = velocity + Vector3.new(0, 50, 0)
-            elseif UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) or gameState.flyDown then
-                velocity = velocity + Vector3.new(0, -50, 0)
-            end
-            
-            bodyVelocity.Velocity = velocity
-        end)
-        
-        print("✈️ Vol activé !")
-    else
-        if flyConnection then
-            flyConnection:Disconnect()
-            flyConnection = nil
-        end
-        
-        if root:FindFirstChild("BodyVelocity") then
-            root.BodyVelocity:Destroy()
-        end
-        
-        gameState.flyUp = false
-        gameState.flyDown = false
-        print("🚶 Vol désactivé")
-    end
+local function toggleFlyGUI()
+    guiState.flyEnabled = not guiState.flyEnabled
+    print("🎭 [GUI SEULEMENT] Vol:", guiState.flyEnabled and "ON" or "OFF")
 end
 
-local noClipConnection
-function MovementSystem.toggleNoClip()
-    local char, hum, root = getCharacter()
-    if not char then
-        warn("❌ Impossible d'activer NoClip: Personnage non trouvé")
-        return
-    end
-    
-    gameState.noClipEnabled = not gameState.noClipEnabled
-    
-    if gameState.noClipEnabled then
-        noClipConnection = RunService.Stepped:Connect(function()
-            local char = getCharacter()
-            if char then
-                for _, part in pairs(char:GetChildren()) do
-                    if part:IsA("BasePart") then
-                        part.CanCollide = false
-                    end
-                end
-            end
-        end)
-        print("👻 NoClip activé !")
-    else
-        if noClipConnection then
-            noClipConnection:Disconnect()
-            noClipConnection = nil
-        end
-        
-        local char = getCharacter()
-        if char then
-            for _, part in pairs(char:GetChildren()) do
-                if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-                    part.CanCollide = true
-                end
-            end
-        end
-        print("🚶 NoClip désactivé")
-    end
+local function toggleNoClipGUI()
+    guiState.noClipEnabled = not guiState.noClipEnabled
+    print("🎭 [GUI SEULEMENT] NoClip:", guiState.noClipEnabled and "ON" or "OFF")
 end
 
 -- ========================================
--- 📱 INTERFACE MOBILE PRINCIPALE
+-- 📱 INTERFACE MOBILE GUI SEULEMENT
 -- ========================================
 
-local function createMobileGUI()
+local function createGUIOnlyInterface()
     -- Vérifier si une GUI existe déjà
-    if playerGui:FindFirstChild("RobloxHubMobileGUI") then
-        playerGui.RobloxHubMobileGUI:Destroy()
+    if playerGui:FindFirstChild("RobloxHubGUIOnly") then
+        playerGui.RobloxHubGUIOnly:Destroy()
     end
     
     -- Créer la GUI principale
     local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "RobloxHubMobileGUI"
+    screenGui.Name = "RobloxHubGUIOnly"
     screenGui.Parent = playerGui
     screenGui.ResetOnSpawn = false
     screenGui.IgnoreGuiInset = true
@@ -421,13 +251,13 @@ local function createMobileGUI()
         BackgroundColor3 = CONFIG.COLORS.PRIMARY
     })
     
-    -- Bouton hamburger
+    -- Bouton hamburger (GUI seulement)
     local hamburgerButton = createMobileButton(header, "☰", 
         UDim2.new(0, 10, 0.5, -25), 
         UDim2.new(0, 50, 0, 50), 
         function()
-            gameState.menuOpen = not gameState.menuOpen
-            -- Animation du menu (implémentée plus bas)
+            guiState.menuOpen = not guiState.menuOpen
+            print("🎭 [GUI SEULEMENT] Menu:", guiState.menuOpen and "OUVERT" or "FERMÉ")
         end
     )
     
@@ -437,7 +267,7 @@ local function createMobileGUI()
     title.Size = UDim2.new(1, -120, 1, 0)
     title.Position = UDim2.new(0, 70, 0, 0)
     title.BackgroundTransparency = 1
-    title.Text = "📱 ROBLOX HUB MOBILE"
+    title.Text = "📱 ROBLOX HUB (GUI ONLY)"
     title.TextColor3 = CONFIG.COLORS.ACCENT
     title.TextScaled = true
     title.Font = Enum.Font.GothamBold
@@ -449,6 +279,7 @@ local function createMobileGUI()
         UDim2.new(0, 50, 0, 50), 
         function()
             screenGui:Destroy()
+            print("👋 Interface fermée")
         end, "danger"
     )
     
@@ -480,54 +311,54 @@ local function createMobileGUI()
     padding.Parent = scrollFrame
     padding.PaddingAll = UDim.new(0, CONFIG.MOBILE_SPACING)
     
-    -- Boutons de fonctionnalités mobile-optimisés
+    -- Boutons de fonctionnalités GUI seulement
     local buttonWidth = UDim2.new(1, 0, 0, CONFIG.MOBILE_BUTTON_SIZE)
     
-    -- Bouton Vitesse
+    -- Bouton Vitesse (GUI seulement)
     local speedButton, _, speedLabel = createMobileButton(scrollFrame, "🏃 Vitesse: OFF", 
         UDim2.new(0, 0, 0, 0), buttonWidth, 
         function()
-            MovementSystem.toggleSpeed()
-            speedLabel.Text = gameState.speedEnabled and "🏃 Vitesse: ON" or "🏃 Vitesse: OFF"
-            speedButton.BackgroundColor3 = gameState.speedEnabled and CONFIG.COLORS.SUCCESS or CONFIG.COLORS.PRIMARY
+            toggleSpeedGUI()
+            speedLabel.Text = guiState.speedEnabled and "🏃 Vitesse: ON" or "🏃 Vitesse: OFF"
+            speedButton.BackgroundColor3 = guiState.speedEnabled and CONFIG.COLORS.SUCCESS or CONFIG.COLORS.PRIMARY
         end
     )
     speedButton.LayoutOrder = 1
     
-    -- Bouton Saut
+    -- Bouton Saut (GUI seulement)
     local jumpButton, _, jumpLabel = createMobileButton(scrollFrame, "🦘 Saut: OFF", 
         UDim2.new(0, 0, 0, 0), buttonWidth, 
         function()
-            MovementSystem.toggleJump()
-            jumpLabel.Text = gameState.jumpEnabled and "🦘 Saut: ON" or "🦘 Saut: OFF"
-            jumpButton.BackgroundColor3 = gameState.jumpEnabled and CONFIG.COLORS.SUCCESS or CONFIG.COLORS.PRIMARY
+            toggleJumpGUI()
+            jumpLabel.Text = guiState.jumpEnabled and "🦘 Saut: ON" or "🦘 Saut: OFF"
+            jumpButton.BackgroundColor3 = guiState.jumpEnabled and CONFIG.COLORS.SUCCESS or CONFIG.COLORS.PRIMARY
         end
     )
     jumpButton.LayoutOrder = 2
     
-    -- Bouton Vol
+    -- Bouton Vol (GUI seulement)
     local flyButton, _, flyLabel = createMobileButton(scrollFrame, "✈️ Vol: OFF", 
         UDim2.new(0, 0, 0, 0), buttonWidth, 
         function()
-            MovementSystem.toggleFly()
-            flyLabel.Text = gameState.flyEnabled and "✈️ Vol: ON" or "✈️ Vol: OFF"
-            flyButton.BackgroundColor3 = gameState.flyEnabled and CONFIG.COLORS.SUCCESS or CONFIG.COLORS.PRIMARY
+            toggleFlyGUI()
+            flyLabel.Text = guiState.flyEnabled and "✈️ Vol: ON" or "✈️ Vol: OFF"
+            flyButton.BackgroundColor3 = guiState.flyEnabled and CONFIG.COLORS.SUCCESS or CONFIG.COLORS.PRIMARY
         end
     )
     flyButton.LayoutOrder = 3
     
-    -- Bouton NoClip
+    -- Bouton NoClip (GUI seulement)
     local noClipButton, _, noClipLabel = createMobileButton(scrollFrame, "👻 NoClip: OFF", 
         UDim2.new(0, 0, 0, 0), buttonWidth, 
         function()
-            MovementSystem.toggleNoClip()
-            noClipLabel.Text = gameState.noClipEnabled and "👻 NoClip: ON" or "👻 NoClip: OFF"
-            noClipButton.BackgroundColor3 = gameState.noClipEnabled and CONFIG.COLORS.SUCCESS or CONFIG.COLORS.PRIMARY
+            toggleNoClipGUI()
+            noClipLabel.Text = guiState.noClipEnabled and "👻 NoClip: ON" or "👻 NoClip: OFF"
+            noClipButton.BackgroundColor3 = guiState.noClipEnabled and CONFIG.COLORS.SUCCESS or CONFIG.COLORS.PRIMARY
         end
     )
     noClipButton.LayoutOrder = 4
     
-    -- Contrôles de vol pour mobile
+    -- Contrôles de vol simulés pour mobile
     if isMobile then
         local flyControlsFrame = createMobileFrame(scrollFrame, {
             Size = UDim2.new(1, 0, 0, CONFIG.MOBILE_BUTTON_SIZE + 20),
@@ -538,36 +369,23 @@ local function createMobileGUI()
         local flyUpButton = createMobileButton(flyControlsFrame, "⬆️ MONTER", 
             UDim2.new(0, 5, 0, 10), 
             UDim2.new(0.48, 0, 0, CONFIG.MOBILE_BUTTON_SIZE), 
-            nil, "warning"
+            function()
+                print("🎭 [GUI SEULEMENT] Commande vol: MONTER")
+            end, "warning"
         )
         
         local flyDownButton = createMobileButton(flyControlsFrame, "⬇️ DESCENDRE", 
             UDim2.new(0.52, 0, 0, 10), 
             UDim2.new(0.48, 0, 0, CONFIG.MOBILE_BUTTON_SIZE), 
-            nil, "warning"
+            function()
+                print("🎭 [GUI SEULEMENT] Commande vol: DESCENDRE")
+            end, "warning"
         )
-        
-        -- Gestion des contrôles tactiles pour le vol
-        flyUpButton[2].MouseButton1Down:Connect(function()
-            gameState.flyUp = true
-        end)
-        
-        flyUpButton[2].MouseButton1Up:Connect(function()
-            gameState.flyUp = false
-        end)
-        
-        flyDownButton[2].MouseButton1Down:Connect(function()
-            gameState.flyDown = true
-        end)
-        
-        flyDownButton[2].MouseButton1Up:Connect(function()
-            gameState.flyDown = false
-        end)
     end
     
-    -- Informations mobile-optimisées
+    -- Informations GUI seulement
     local infoFrame = createMobileFrame(scrollFrame, {
-        Size = UDim2.new(1, 0, 0, isMobile and 120 : 100),
+        Size = UDim2.new(1, 0, 0, isMobile and 140 or 120),
         BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     })
     infoFrame.LayoutOrder = 6
@@ -577,12 +395,30 @@ local function createMobileGUI()
     infoLabel.Size = UDim2.new(1, -20, 1, -20)
     infoLabel.Position = UDim2.new(0, 10, 0, 10)
     infoLabel.BackgroundTransparency = 1
-    infoLabel.Text = isMobile and "📱 CONTRÔLES TACTILES:\n• Touchez les boutons pour activer\n• Maintenez MONTER/DESCENDRE pour voler\n• Interface optimisée mobile" or "📋 CONTRÔLES:\n• Cliquez sur les boutons\n• Espace/Shift pour vol\n• Interface responsive"
+    infoLabel.Text = "🎭 VERSION GUI SEULEMENT\n\n• Interface tactile fonctionnelle\n• Boutons visuels sans effet réel\n• Compatible avec tous exploits\n• Aucun risque de détection\n• Parfait pour tester l'interface"
     infoLabel.TextColor3 = Color3.new(0.8, 0.8, 0.8)
     infoLabel.TextScaled = true
     infoLabel.Font = Enum.Font.Gotham
     infoLabel.TextXAlignment = Enum.TextXAlignment.Left
     infoLabel.TextYAlignment = Enum.TextYAlignment.Top
+    
+    -- Statut en temps réel
+    local statusFrame = createMobileFrame(scrollFrame, {
+        Size = UDim2.new(1, 0, 0, CONFIG.MOBILE_BUTTON_SIZE),
+        BackgroundColor3 = Color3.fromRGB(30, 60, 30)
+    })
+    statusFrame.LayoutOrder = 7
+    
+    local statusLabel = Instance.new("TextLabel")
+    statusLabel.Parent = statusFrame
+    statusLabel.Size = UDim2.new(1, -20, 1, -10)
+    statusLabel.Position = UDim2.new(0, 10, 0, 5)
+    statusLabel.BackgroundTransparency = 1
+    statusLabel.Text = "✅ INTERFACE ACTIVE - AUCUNE FONCTIONNALITÉ RÉELLE"
+    statusLabel.TextColor3 = CONFIG.COLORS.SUCCESS
+    statusLabel.TextScaled = true
+    statusLabel.Font = Enum.Font.GothamBold
+    statusLabel.TextXAlignment = Enum.TextXAlignment.Center
     
     -- Ajuster la taille du contenu scrollable
     scrollFrame.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 40)
@@ -591,211 +427,45 @@ local function createMobileGUI()
         scrollFrame.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 40)
     end)
     
-    -- Rendre la fenêtre déplaçable (optimisé pour mobile)
-    local dragging = false
-    local dragStart = nil
-    local startPos = nil
+    -- Animation d'entrée
+    mainFrame.Size = UDim2.new(0, 0, 0, 0)
+    local entranceTween = createTween(mainFrame, {
+        Size = UDim2.new(0, CONFIG.GUI_WIDTH, 0, CONFIG.GUI_HEIGHT)
+    }, 0.5, Enum.EasingStyle.Back)
     
-    local function startDrag(input)
-        dragging = true
-        dragStart = input.Position
-        startPos = mainFrame.Position
+    if entranceTween then
+        entranceTween:Play()
     end
     
-    local function updateDrag(input)
-        if dragging then
-            local delta = input.Position - dragStart
-            mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-        end
-    end
-    
-    local function endDrag()
-        dragging = false
-    end
-    
-    -- Support tactile et souris
-    header.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            startDrag(input)
-        end
-    end)
-    
-    header.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-            updateDrag(input)
-        end
-    end)
-    
-    header.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            endDrag()
-        end
-    end)
-    
-    print("✅ Interface mobile créée avec succès!")
-    return screenGui
+    print("✅ Interface GUI-Only créée avec succès!")
+    print("🎭 Toutes les fonctionnalités sont purement visuelles")
+    print("🔒 Aucun risque de détection ou de problème de compatibilité")
 end
 
 -- ========================================
--- 🎯 BOUTONS FLOTTANTS MOBILES
+-- 🚀 INITIALISATION PRINCIPALE
 -- ========================================
 
-local function createFloatingButtons()
-    if not isMobile then return end
-    
-    local floatingGui = Instance.new("ScreenGui")
-    floatingGui.Name = "FloatingButtons"
-    floatingGui.Parent = playerGui
-    floatingGui.ResetOnSpawn = false
-    floatingGui.IgnoreGuiInset = true
-    
-    -- Bouton flottant principal (toggle menu)
-    local mainFloatingButton = createMobileButton(floatingGui, "🎮", 
-        UDim2.new(1, -80, 0, 100), 
-        UDim2.new(0, 60, 0, 60), 
-        function()
-            if playerGui:FindFirstChild("RobloxHubMobileGUI") then
-                playerGui.RobloxHubMobileGUI:Destroy()
-            else
-                createMobileGUI()
-            end
-        end
-    )
-    
-    -- Boutons flottants secondaires
-    local speedFloatingButton = createMobileButton(floatingGui, "🏃", 
-        UDim2.new(1, -80, 0, 180), 
-        UDim2.new(0, 50, 0, 50), 
-        function()
-            MovementSystem.toggleSpeed()
-            speedFloatingButton[3].Text = gameState.speedEnabled and "🏃" or "🚶"
-            speedFloatingButton[1].BackgroundColor3 = gameState.speedEnabled and CONFIG.COLORS.SUCCESS or CONFIG.COLORS.PRIMARY
-        end
-    )
-    
-    local jumpFloatingButton = createMobileButton(floatingGui, "🦘", 
-        UDim2.new(1, -80, 0, 240), 
-        UDim2.new(0, 50, 0, 50), 
-        function()
-            MovementSystem.toggleJump()
-            jumpFloatingButton[3].Text = gameState.jumpEnabled and "🦘" or "👟"
-            jumpFloatingButton[1].BackgroundColor3 = gameState.jumpEnabled and CONFIG.COLORS.SUCCESS or CONFIG.COLORS.PRIMARY
-        end
-    )
-    
-    print("✅ Boutons flottants créés!")
-end
+print("🎭 ========================================")
+print("🎭 ROBLOX HUB SCRIPT - VERSION GUI SEULEMENT")
+print("🎭 ========================================")
+print("📱 Détection mobile:", isMobile and "OUI" or "NON")
+print("📺 Résolution:", screenSize.X .. "x" .. screenSize.Y)
+print("🎭 Mode: Interface seulement (aucune fonctionnalité réelle)")
+print("🔒 Sécurité: Maximale (aucun service problématique)")
+print("")
 
--- ========================================
--- 🚀 GESTION DES RESPAWNS
--- ========================================
+-- Créer l'interface GUI seulement
+createGUIOnlyInterface()
 
-local function onCharacterAdded(newCharacter)
-    print("🔄 Nouveau personnage détecté, mise à jour...")
-    
-    if newCharacter:WaitForChild("Humanoid", 5) and newCharacter:WaitForChild("HumanoidRootPart", 5) then
-        character = newCharacter
-        humanoid = character.Humanoid
-        rootPart = character.HumanoidRootPart
-        
-        -- Réinitialiser l'état
-        gameState.speedEnabled = false
-        gameState.jumpEnabled = false
-        gameState.flyEnabled = false
-        gameState.noClipEnabled = false
-        gameState.flyUp = false
-        gameState.flyDown = false
-        
-        -- Nettoyer les connexions existantes
-        if flyConnection then
-            flyConnection:Disconnect()
-            flyConnection = nil
-        end
-        if noClipConnection then
-            noClipConnection:Disconnect()
-            noClipConnection = nil
-        end
-        
-        print("✅ Personnage mis à jour avec succès!")
-    else
-        warn("❌ Échec du chargement du nouveau personnage")
-    end
-end
+print("✅ Script GUI-Only prêt à l'utilisation!")
+print("🎭 Toutes les interactions sont purement cosmétiques")
+print("📱 Interface optimisée pour mobile et desktop")
+print("🔒 Compatible avec tous les exploits")
 
-player.CharacterAdded:Connect(onCharacterAdded)
-
--- ========================================
--- 🎯 CONTRÔLES ET RACCOURCIS
--- ========================================
-
--- Raccourcis clavier (pour les appareils avec clavier)
-if not isMobile then
-    UserInputService.InputBegan:Connect(function(input, gameProcessed)
-        if gameProcessed then return end
-        
-        if input.KeyCode == Enum.KeyCode.F1 then
-            if playerGui:FindFirstChild("RobloxHubMobileGUI") then
-                playerGui.RobloxHubMobileGUI:Destroy()
-            else
-                createMobileGUI()
-            end
-        elseif input.KeyCode == Enum.KeyCode.F2 then
-            MovementSystem.toggleSpeed()
-        elseif input.KeyCode == Enum.KeyCode.F3 then
-            MovementSystem.toggleJump()
-        elseif input.KeyCode == Enum.KeyCode.F4 then
-            MovementSystem.toggleFly()
-        elseif input.KeyCode == Enum.KeyCode.F5 then
-            MovementSystem.toggleNoClip()
-        end
-    end)
-end
-
--- Gestion de l'orientation mobile
-if isMobile then
-    local function updateOrientation()
-        local newScreenSize = workspace.CurrentCamera.ViewportSize
-        local isLandscape = newScreenSize.X > newScreenSize.Y
-        
-        -- Ajuster la configuration selon l'orientation
-        CONFIG.GUI_WIDTH = math.min(newScreenSize.X * 0.9, isLandscape and 450 or 350)
-        CONFIG.GUI_HEIGHT = math.min(newScreenSize.Y * 0.8, isLandscape and 400 or 500)
-        
-        -- Recréer l'interface si elle existe
-        if playerGui:FindFirstChild("RobloxHubMobileGUI") then
-            playerGui.RobloxHubMobileGUI:Destroy()
-            wait(0.1)
-            createMobileGUI()
-        end
-    end
-    
-    workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(updateOrientation)
-end
-
--- ========================================
--- 🚀 INITIALISATION FINALE
--- ========================================
-
--- Créer l'interface au démarrage
-wait(1)
-if isMobile then
-    createFloatingButtons()
-    print("📱 Interface mobile avec boutons flottants créée!")
-else
-    createMobileGUI()
-    print("💻 Interface desktop responsive créée!")
-end
-
-print("🎮 ROBLOX HUB MOBILE SCRIPT CHARGÉ AVEC SUCCÈS!")
-print("📱 Mode mobile:", isMobile)
-print("📋 CONTRÔLES:")
-if isMobile then
-    print("• Touchez le bouton 🎮 pour ouvrir le menu")
-    print("• Utilisez les boutons flottants pour un accès rapide")
-    print("• Interface tactile optimisée")
-else
-    print("• F1: Ouvrir/Fermer l'interface")
-    print("• F2-F5: Raccourcis fonctions")
-    print("• Interface responsive")
-end
-print("✅ Script mobile prêt à l'utilisation!")
+-- Message de rappel
+wait(2)
+print("")
+print("⚠️  RAPPEL: Cette version n'affecte pas le gameplay")
+print("🎭 Les boutons changent visuellement mais n'ont aucun effet réel")
+print("✅ Parfait pour tester l'interface sans risque")
